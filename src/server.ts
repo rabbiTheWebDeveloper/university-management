@@ -5,7 +5,6 @@ import app from "./app";
 async function boostrap() {
   try {
 
-    console.log("url " ,config.database_url)
     await mongoose.connect(config.database_url as string);
     console.log(`🛢   Database is connected successfully`);
 
