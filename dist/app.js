@@ -12,4 +12,4 @@ app.use(express_1.default.urlencoded({ extended: true }));
 app.get('/', function (req, res) {
     res.send('Hello World');
 });
-app.listen(3000);
+exports.default = app;
