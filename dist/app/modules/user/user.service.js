@@ -22,9 +22,9 @@ const createUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
         user.password = config_1.default.defult_user_password;
     }
     const createUser = yield user_model_1.User.create(user);
-    if (!createUser) {
-        throw new Error('Failed to create user !');
-    }
+    // if (!createUser) {
+    //   throw new Error('Failed to create user !')
+    // }
     return createUser;
 });
 exports.default = {
