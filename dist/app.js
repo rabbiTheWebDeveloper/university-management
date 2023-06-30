@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const user_route_1 = __importDefault(require("./app/modules/user/user.route"));
+const globalErrorHandler_1 = __importDefault(require("./app/middlewares/globalErrorHandler"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 //parser
@@ -17,4 +18,5 @@ app.use("/api/v1/user", user_route_1.default);
 app.get('/', (req, res) => {
     res.send('Working Successfully');
 });
+app.use(globalErrorHandler_1.default);
 exports.default = app;
