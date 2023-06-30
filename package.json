@@ -5,6 +5,11 @@
   "main": "src/server.ts",
   "scripts": {
     "start": "ts-node-dev --respawn --transpile-only src/server.ts",
+
+    "build": "rimraf dist && tsc",
+    "ts.check": "tsc --project tsconfig.json",
+    "add-build": "git add dist",
+    
     "lint:check": "eslint --ignore-path .eslintignore --ext .js,.ts .",
     "lint:fix": "eslint . --fix",
     "prettier:fix": "prettier --write .",
