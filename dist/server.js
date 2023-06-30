@@ -15,13 +15,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const index_1 = __importDefault(require("./config/index"));
 const app_1 = __importDefault(require("./app"));
+const logger_1 = require("./shared/logger");
 function boostrap() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             yield mongoose_1.default.connect(index_1.default.database_url);
-            console.log(`🛢   Database is connected successfully`);
+            logger_1.logger.info(`🛢   Database is connected successfully`);
             app_1.default.listen(index_1.default.port, () => {
-                console.log(`Application  listening on port ${index_1.default.port}`);
+                logger_1.logger.info(`Application  listening on port ${index_1.default.port}`);
             });
         }
         catch (err) {

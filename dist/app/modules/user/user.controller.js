@@ -8,21 +8,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateUser = exports.findLastUser = void 0;
-const user_model_1 = require("./user.model");
-const findLastUser = () => __awaiter(void 0, void 0, void 0, function* () {
-    const lastUser = yield user_model_1.User.findOne({}, { id: 1, _id: 0 })
-        .sort({
-        createdAt: -1,
-    })
-        .lean();
-    return lastUser === null || lastUser === void 0 ? void 0 : lastUser.id;
+const user_service_1 = __importDefault(require("./user.service"));
+const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = req.body;
+        const result = yield user_service_1.default.createUser(user);
+        res.status(200).json({
+            success: true,
+            message: 'user created successfully!',
+            data: result,
+        });
+    }
+    catch (err) {
+        res.status(400).json({
+            success: false,
+            message: 'user created fail!',
+        });
+    }
 });
-exports.findLastUser = findLastUser;
-const generateUser = () => __awaiter(void 0, void 0, void 0, function* () {
-    const currentId = (yield (0, exports.findLastUser)()) || (0).toString().padStart(5, '0'); //00000
-    const incrementId = (parseInt(currentId) + 1).toString().padStart(5, '0');
-    return incrementId;
-});
-exports.generateUser = generateUser;
+exports.default = {
+    createUser,
+};
