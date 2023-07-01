@@ -15,8 +15,8 @@ app.use(express_1.default.urlencoded({ extended: true }));
 // api 
 app.use("/api/v1/user", user_route_1.default);
 //Testing
-app.get('/', (req, res) => {
-    res.send('Working Successfully');
-});
+// app.get('/', (req: Request, res: Response) => {
+//   res.send('Working Successfully')
+// })
 app.use(globalErrorHandler_1.default);
 exports.default = app;

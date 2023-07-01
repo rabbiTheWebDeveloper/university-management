@@ -1,56 +1,49 @@
-import { ErrorRequestHandler, NextFunction, Request, Response } from 'express'
+import { ErrorRequestHandler } from 'express'
 import { IGenericErrorMessage } from '../../interface/error'
 import handleValidationError from '../../errors/handleValidationError'
 import config from '../../config/index'
 import { Error } from 'mongoose'
-import ApiError from '../../errors/ApiErros'
+import ApiError from '../../errors/ApiError'
 
-const globalErrorHandler: ErrorRequestHandler = (
-  err,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
   //   next(err)
 
   let statusCode = 5000
   let message = 'something went worng'
   let errorMessages: IGenericErrorMessage[] = []
 
-  if (err.name === 'ValidationError') {
-    const simplifiedError = handleValidationError(err)
+  if (error?.name === 'ValidationError') {
+    const simplifiedError = handleValidationError(error)
     statusCode = simplifiedError?.statusCode
     message = simplifiedError?.message
     errorMessages = simplifiedError?.errorMessages
-
-
-  }
-  else if (err instanceof ApiError) {
-    statusCode= err.statusCode;
-    message= err.message;
-    errorMessages=err.message ?
-    [{
-      path: 'errors',
-      message:err.message,
-    }]: []
-
-  }
-  else if(err instanceof Error){
-    message=err?.message
-    errorMessages=err?.message ?
-    [
-      {
-        path:"" ,
-        message: err?.message,
-      }
-    ] : []
-
+  } else if (error instanceof ApiError) {
+    statusCode = error?.statusCode
+    message = error?.message
+    errorMessages = error?.message
+      ? [
+          {
+            path: '',
+            message: error?.message,
+          },
+        ]
+      : []
+  } else if (error instanceof Error) {
+    message = error?.message
+    errorMessages = error?.message
+      ? [
+          {
+            path: '',
+            message: error?.message,
+          },
+        ]
+      : []
   }
   res.status(statusCode).json({
     success: false,
     message,
     errorMessages,
-    stack:config.env !== 'production' ? err?.stack : undefined,
+    stack: config.env !== 'production' ? error?.stack : undefined,
   })
   next()
 }
