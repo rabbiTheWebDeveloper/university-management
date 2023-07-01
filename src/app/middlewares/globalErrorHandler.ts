@@ -4,6 +4,8 @@ import handleValidationError from '../../errors/handleValidationError'
 import config from '../../config/index'
 import { Error } from 'mongoose'
 import ApiError from '../../errors/ApiError'
+import handleZodError from '../../errors/handleZodError'
+import { ZodError } from 'zod'
 
 const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
   //   next(err)
@@ -17,6 +19,11 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
     statusCode = simplifiedError?.statusCode
     message = simplifiedError?.message
     errorMessages = simplifiedError?.errorMessages
+  } else if (error instanceof ZodError) {
+    const simplifiedError = handleZodError(error)
+    statusCode = simplifiedError.statusCode
+    message = simplifiedError.message
+    errorMessages = simplifiedError.errorMessages
   } else if (error instanceof ApiError) {
     statusCode = error?.statusCode
     message = error?.message
