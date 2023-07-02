@@ -1,20 +1,18 @@
-import config from '../../../config'
-import { IUser } from './academicSemester.interface'
-import { User } from './academicSemester.model'
-import { generateUser } from './academicSemester.utils'
+import ApiError from '../../../errors/ApiError'
+import { academicSemesterTitleCodeMapper } from './academicSemester.constant'
+import { IAcademicSemester } from './academicSemester.interface'
+import { AcademicSemester } from './academicSemester.model'
+import httpStatus from 'http-status'
 
-const createUser = async (user: IUser): Promise<IUser | null> => {
-  const id = await generateUser()
-  user.id = id
-  if(!user.password){
-    user.password = config.defult_user_password as string
+const createSemester = async (
+  payload: IAcademicSemester
+): Promise<IAcademicSemester> => {
+  if (academicSemesterTitleCodeMapper[payload.title] !== payload.code) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid Semester Code')
   }
-  const createUser = await User.create(user)
-  // if (!createUser) {
-  //   throw new Error('Failed to create user !')
-  // }
-  return createUser
+  const result = await AcademicSemester.create(payload)
+  return result
 }
- export default {
-    createUser
- }
+export const AcademicSemesterService = {
+  createSemester,
+}

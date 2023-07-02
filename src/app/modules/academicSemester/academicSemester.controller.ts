@@ -1,20 +1,19 @@
 import { RequestHandler } from 'express'
-import usersService from './academicSemester.service'
+import { AcademicSemesterService } from './academicSemester.service'
 
-const createUser: RequestHandler = async (req, res, next) => {
+const createSemester: RequestHandler = async (req, res, next) => {
   try {
     const user = req.body
-    const result = await usersService.createUser(user)
+    const result = await AcademicSemesterService.createSemester(user)
     res.status(200).json({
       success: true,
-      message: 'user created successfully!',
+      message: 'Academic Senester created successfully!',
       data: result,
     })
   } catch (err) {
     next(err)
   }
 }
-
-export const UserController = {
-  createUser,
+export const AcademicSemesterController = {
+  createSemester,
 }

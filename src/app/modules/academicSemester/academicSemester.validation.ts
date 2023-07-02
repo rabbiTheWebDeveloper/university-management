@@ -1,14 +1,27 @@
-import { z } from 'zod';
-
-const createUserZodSchema = z.object({
+import {
+  academicSemesterCodes,
+  academicSemesterTitles,
+  acdemicSemesterMonths,
+} from './academicSemester.constant'
+import { z } from 'zod'
+const createAcademicSemesterZodSchema = z.object({
   body: z.object({
-    role: z.string({
-      required_error: 'role is required',
+    title: z.enum([...academicSemesterTitles] as [string, ...string[]], {
+      required_error: 'Title is required',
     }),
-    password: z.string().optional(),
+    year: z.string({
+      required_error: 'Year is required ',
+    }),
+    code: z.enum([...academicSemesterCodes] as [string, ...string[]]),
+    startMonth: z.enum([...acdemicSemesterMonths] as [string, ...string[]], {
+      required_error: 'Start month is needed',
+    }),
+    endMonth: z.enum([...acdemicSemesterMonths] as [string, ...string[]], {
+      required_error: 'End month is needed',
+    }),
   }),
-});
+})
 
-export const UserValidation = {
-  createUserZodSchema,
-};
+export const AcademicSemesterValidation = {
+  createAcademicSemesterZodSchema,
+}
